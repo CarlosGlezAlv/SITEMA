@@ -1,3 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">SITEMA</string>
+
+    <!-- Login -->
+    <string name="login_titulo">Sistema de Información Escolar</string>
+    <string name="login_subtitulo">Tecnológico Nacional de México</string>
+    <string name="login_label_id">No. de Identificación</string>
+    <string name="login_hint_id">Ingresa tu número</string>
+    <string name="login_btn">Ingresar</string>
+    <string name="login_footer">Acceso exclusivo para usuarios registrados</string>
+
+    <!-- Alumnos -->
+    <string name="alumnos_titulo">Portal del Alumno</string>
+    <string name="alumnos_datos">DATOS PERSONALES</string>
+    <string name="alumnos_label_control">No. de Control</string>
+    <string name="alumnos_hint_control">Ej. 22XXXXX</string>
+    <string name="alumnos_label_nombre">Nombre Completo</string>
+    <string name="alumnos_hint_nombre">Nombre(s) Apellido(s)</string>
+    <string name="alumnos_label_telefono">Número de Teléfono</string>
+    <string name="alumnos_hint_telefono">10 dígitos</string>
+    <string name="alumnos_materias">MATERIAS Y CALIFICACIONES</string>
+    <string name="alumnos_col_materia">Materia</string>
+    <string name="alumnos_col_calif">Calificación</string>
+    <string name="alumnos_promedio">Promedio General</string>
+
+    <!-- Docentes -->
+    <string name="docentes_titulo">Portal del Docente</string>
+    <string name="docentes_datos">DATOS DEL DOCENTE</string>
+    <string name="docentes_label_empleado">No. de Empleado</string>
+    <string name="docentes_hint_empleado">Ej. EMP-0001</string>
+    <string name="docentes_label_nombre">Nombre Completo</string>
+    <string name="docentes_hint_nombre">Nombre(s) Apellido(s)</string>
+    <string name="docentes_label_dir">Dirección</string>
+    <string name="docentes_hint_dir">Calle, Colonia, Ciudad</string>
+    <string name="docentes_materias">MATERIAS POR ALUMNO</string>
+    <string name="docentes_label_alumno">Seleccionar Alumno</string>
+    <string name="docentes_hint_alumno">Elige un alumno…</string>
+    <string name="docentes_col_materia">Materia</string>
+    <string name="docentes_col_calif">Calificación</string>
+    <string name="docentes_col_accion">Acción</string>
+    <string name="docentes_btn_asignar">Asignar</string>
+
+    <!-- Administrador -->
+    <string name="admin_titulo">Panel de Administrador</string>
+    <string name="admin_bienvenida">Panel de Control</string>
+    <string name="admin_bienvenida_sub">Gestión completa del sistema escolar</string>
+    <string name="admin_alumnos">GESTIÓN DE ALUMNOS</string>
+    <string name="admin_docentes">GESTIÓN DE DOCENTES</string>
+    <string name="admin_materias">GESTIÓN DE MATERIAS</string>
+    <string name="admin_btn_alta">Alta</string>
+    <string name="admin_btn_ver">Visualizar</string>
+    <string name="admin_btn_editar">Editar</string>
+    <string name="admin_btn_eliminar">Eliminar</string>
 </resources>

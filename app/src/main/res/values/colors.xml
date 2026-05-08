@@ -2,4 +2,15 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- Colores institucionales TEC -->
+    <color name="tec_red">#C8102E</color>
+    <color name="tec_red_dark">#9A0C23</color>
+    <color name="tec_red_light">#F2D0D6</color>
+
+    <!-- Generales -->
+    <color name="bg_screen">#F4F5F7</color>
+    <color name="text_primary">#1A1A2E</color>
+    <color name="text_secondary">#6B7280</color>
+    <color name="danger">#D32F2F</color>
 </resources>
