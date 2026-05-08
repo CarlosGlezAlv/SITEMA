@@ -2,6 +2,7 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/alumnos_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -36,7 +37,6 @@
             <androidx.cardview.widget.CardView
                 android:id="@+id/card_datos_alumno"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="4dp"
                 app:cardBackgroundColor="@color/white">
@@ -223,26 +223,25 @@
                             android:textStyle="bold" />
                     </LinearLayout>
 
-                    <include layout="@layout/item_materia_calificacion"
-                        android:id="@+id/item_materia_1"
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_materias"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-                    <include layout="@layout/item_materia_calificacion"
-                        android:id="@+id/item_materia_2"
+                        android:layout_height="wrap_content"
+                        android:nestedScrollingEnabled="false"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        tools:listitem="@layout/item_materia_calificacion" />
+
+                    <TextView
+                        android:id="@+id/tv_sin_materias"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-                    <include layout="@layout/item_materia_calificacion"
-                        android:id="@+id/item_materia_3"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-                    <include layout="@layout/item_materia_calificacion"
-                        android:id="@+id/item_materia_4"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-                    <include layout="@layout/item_materia_calificacion"
-                        android:id="@+id/item_materia_5"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:text="No tienes materias asignadas por el momento."
+                        android:textAlignment="center"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="13sp"
+                        android:textStyle="italic"
+                        android:visibility="gone" />
 
                     <View
                         android:layout_width="match_parent"
