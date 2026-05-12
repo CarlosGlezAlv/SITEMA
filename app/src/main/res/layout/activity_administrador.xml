@@ -111,6 +111,17 @@
                             android:textColor="@color/danger"
                             app:strokeColor="@color/danger" />
 
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn_asignar_materia_alumno"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_columnSpan="2"
+                            android:layout_columnWeight="1"
+                            android:text="Asignar Materia"
+                            android:textColor="@color/tec_red"
+                            app:strokeColor="@color/tec_red" />
+
                     </GridLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -191,6 +202,17 @@
                             android:text="@string/admin_btn_eliminar"
                             android:textColor="@color/danger"
                             app:strokeColor="@color/danger" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn_asignar_materia_docente"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_columnSpan="2"
+                            android:layout_columnWeight="1"
+                            android:text="Asignar Materia"
+                            android:textColor="@color/tec_red"
+                            app:strokeColor="@color/tec_red" />
 
                     </GridLayout>
                 </LinearLayout>

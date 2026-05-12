@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "SistemaEscolar.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     public static final String TABLA_ALUMNOS = "alumnos";
     public static final String COL_ALUMNO_NUM_CONTROL = "numero_control";
@@ -32,11 +32,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COL_AM_CLAVE_MATERIA = "clave_materia";
     public static final String COL_AM_CALIFICACION = "calificacion";
 
-    // Tabla Docente_Alumno (Relación Muchos a Muchos: Docentes pueden tener varios
-    // alumnos)
+    // Tabla Docente_Alumno (Relación Muchos a Muchos: Docentes pueden tener varios alumnos)
     public static final String TABLA_DOCENTE_ALUMNO = "docente_alumno";
     public static final String COL_DA_NUM_EMPLEADO = "numero_empleado";
     public static final String COL_DA_NUM_CONTROL = "numero_control";
+
+    // Tabla Docente_Materia (Relación Docentes - Materias)
+    public static final String TABLA_DOCENTE_MATERIA = "docente_materia";
+    public static final String COL_DM_NUM_EMPLEADO = "numero_empleado";
+    public static final String COL_DM_CLAVE_MATERIA = "clave_materia";
 
     // Sentencias de creación de tablas
     private static final String CREATE_TABLE_ALUMNOS = "CREATE TABLE " + TABLA_ALUMNOS + "("
@@ -75,6 +79,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + "FOREIGN KEY(" + COL_DA_NUM_CONTROL + ") REFERENCES " + TABLA_ALUMNOS + "(" + COL_ALUMNO_NUM_CONTROL + ")"
             + ");";
 
+    private static final String CREATE_TABLE_DOCENTE_MATERIA = "CREATE TABLE " + TABLA_DOCENTE_MATERIA + "("
+            + COL_DM_NUM_EMPLEADO + " TEXT,"
+            + COL_DM_CLAVE_MATERIA + " TEXT,"
+            + "PRIMARY KEY(" + COL_DM_NUM_EMPLEADO + ", " + COL_DM_CLAVE_MATERIA + "),"
+            + "FOREIGN KEY(" + COL_DM_NUM_EMPLEADO + ") REFERENCES " + TABLA_DOCENTES + "(" + COL_DOCENTE_NUM_EMPLEADO + "),"
+            + "FOREIGN KEY(" + COL_DM_CLAVE_MATERIA + ") REFERENCES " + TABLA_MATERIAS + "(" + COL_MATERIA_CLAVE + ")"
+            + ");";
+
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -94,6 +106,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_MATERIAS);
         db.execSQL(CREATE_TABLE_ALUMNO_MATERIA);
         db.execSQL(CREATE_TABLE_DOCENTE_ALUMNO);
+        db.execSQL(CREATE_TABLE_DOCENTE_MATERIA);
     }
 
     @Override
@@ -101,6 +114,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // En caso de actualizar la versión de la DB, borramos las tablas anteriores y
         // las volvemos a crear
         // El orden de borrado importa por las Foreign Keys
+        db.execSQL("DROP TABLE IF EXISTS " + TABLA_DOCENTE_MATERIA);
         db.execSQL("DROP TABLE IF EXISTS " + TABLA_DOCENTE_ALUMNO);
         db.execSQL("DROP TABLE IF EXISTS " + TABLA_ALUMNO_MATERIA);
         db.execSQL("DROP TABLE IF EXISTS " + TABLA_MATERIAS);

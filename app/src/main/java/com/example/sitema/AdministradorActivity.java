@@ -13,6 +13,7 @@ public class AdministradorActivity extends AppCompatActivity {
 
     private AlumnoManager alumnoManager;
     private DocenteManager docenteManager;
+    private MateriaManager materiaManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +22,7 @@ public class AdministradorActivity extends AppCompatActivity {
 
         alumnoManager = new AlumnoManager(this);
         docenteManager = new DocenteManager(this);
+        materiaManager = new MateriaManager(this);
 
         // Referencias a los botones de la sección ALUMNOS
         MaterialButton btnAltaAlumno = findViewById(R.id.btn_alta_alumno);
@@ -34,6 +36,9 @@ public class AdministradorActivity extends AppCompatActivity {
         btnEditarAlumno.setOnClickListener(v -> mostrarDialogoBuscarParaEditar());
         btnEliminarAlumno.setOnClickListener(v -> mostrarDialogoEliminar());
 
+        MaterialButton btnAsignarMateriaAlumno = findViewById(R.id.btn_asignar_materia_alumno);
+        btnAsignarMateriaAlumno.setOnClickListener(v -> mostrarDialogoAsignarMateriaAlumno());
+
         // Referencias a los botones de la sección DOCENTES
         MaterialButton btnAltaDocente = findViewById(R.id.btn_alta_docente);
         MaterialButton btnVerDocente = findViewById(R.id.btn_ver_docente);
@@ -45,6 +50,21 @@ public class AdministradorActivity extends AppCompatActivity {
         btnVerDocente.setOnClickListener(v -> mostrarDialogoVerDocentes());
         btnEditarDocente.setOnClickListener(v -> mostrarDialogoBuscarParaEditarDocente());
         btnEliminarDocente.setOnClickListener(v -> mostrarDialogoEliminarDocente());
+
+        MaterialButton btnAsignarMateriaDocente = findViewById(R.id.btn_asignar_materia_docente);
+        btnAsignarMateriaDocente.setOnClickListener(v -> mostrarDialogoAsignarMateriaDocente());
+
+        // Referencias a los botones de la sección MATERIAS
+        MaterialButton btnAltaMateria = findViewById(R.id.btn_alta_materia);
+        MaterialButton btnVerMateria = findViewById(R.id.btn_ver_materia);
+        MaterialButton btnEditarMateria = findViewById(R.id.btn_editar_materia);
+        MaterialButton btnEliminarMateria = findViewById(R.id.btn_eliminar_materia);
+
+        // Eventos clic MATERIAS
+        btnAltaMateria.setOnClickListener(v -> mostrarDialogoAltaMateria());
+        btnVerMateria.setOnClickListener(v -> mostrarDialogoVerMaterias());
+        btnEditarMateria.setOnClickListener(v -> mostrarDialogoBuscarParaEditarMateria());
+        btnEliminarMateria.setOnClickListener(v -> mostrarDialogoEliminarMateria());
     }
 
     // ==========================================
@@ -391,6 +411,273 @@ public class AdministradorActivity extends AppCompatActivity {
                 Toast.makeText(this, "No se encontró el docente o no se pudo eliminar", Toast.LENGTH_SHORT).show();
             }
         });
+        builder.setNegativeButton("Cancelar", null);
+        builder.show();
+    }
+
+    // ==========================================
+    // ALTA MATERIA
+    // ==========================================
+    private void mostrarDialogoAltaMateria() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Alta de Materia");
+
+        LinearLayout layout = new LinearLayout(this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setPadding(50, 40, 50, 10);
+
+        final EditText etClave = new EditText(this);
+        etClave.setHint("Clave de Materia");
+        layout.addView(etClave);
+
+        final EditText etNombre = new EditText(this);
+        etNombre.setHint("Nombre de la Materia");
+        layout.addView(etNombre);
+
+        builder.setView(layout);
+
+        builder.setPositiveButton("Guardar", (dialog, which) -> {
+            String clave = etClave.getText().toString().trim();
+            String nombre = etNombre.getText().toString().trim();
+
+            if (clave.isEmpty() || nombre.isEmpty()) {
+                Toast.makeText(this, "La clave y nombre son obligatorios", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            materiaManager.open();
+            boolean exito = materiaManager.insertarMateria(new Materia(clave, nombre));
+            materiaManager.close();
+
+            if (exito) {
+                Toast.makeText(this, "Materia guardada con éxito", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Error al guardar (La clave ya existe)", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        builder.setNegativeButton("Cancelar", (dialog, which) -> dialog.cancel());
+        builder.show();
+    }
+
+    // ==========================================
+    // VISUALIZAR MATERIAS
+    // ==========================================
+    private void mostrarDialogoVerMaterias() {
+        materiaManager.open();
+        ArrayList<Materia> lista = materiaManager.obtenerTodasLasMaterias();
+        materiaManager.close();
+
+        if (lista.isEmpty()) {
+            Toast.makeText(this, "No hay materias registradas", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String[] materiasArray = new String[lista.size()];
+        for (int i = 0; i < lista.size(); i++) {
+            Materia m = lista.get(i);
+            materiasArray[i] = m.getClaveMateria() + " - " + m.getNombreMateria();
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Lista de Materias");
+        builder.setItems(materiasArray, null);
+        builder.setPositiveButton("Cerrar", null);
+        builder.show();
+    }
+
+    // ==========================================
+    // EDITAR MATERIA
+    // ==========================================
+    private void mostrarDialogoBuscarParaEditarMateria() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Editar Materia");
+        builder.setMessage("Ingrese la Clave de la Materia a editar:");
+
+        final EditText input = new EditText(this);
+        input.setHint("Clave de materia");
+        LinearLayout layout = new LinearLayout(this);
+        layout.setPadding(50, 20, 50, 10);
+        layout.addView(input);
+        builder.setView(layout);
+
+        builder.setPositiveButton("Buscar", (dialog, which) -> {
+            String clave = input.getText().toString().trim();
+            materiaManager.open();
+            Materia materia = materiaManager.obtenerMateriaPorClave(clave);
+            materiaManager.close();
+
+            if (materia != null) {
+                mostrarDialogoEdicionMateria(materia);
+            } else {
+                Toast.makeText(this, "Materia no encontrada", Toast.LENGTH_SHORT).show();
+            }
+        });
+        builder.setNegativeButton("Cancelar", null);
+        builder.show();
+    }
+
+    private void mostrarDialogoEdicionMateria(Materia materia) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Modificando a: " + materia.getClaveMateria());
+
+        LinearLayout layout = new LinearLayout(this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setPadding(50, 40, 50, 10);
+
+        final EditText etNombre = new EditText(this);
+        etNombre.setText(materia.getNombreMateria());
+        layout.addView(etNombre);
+
+        builder.setView(layout);
+
+        builder.setPositiveButton("Actualizar", (dialog, which) -> {
+            materia.setNombreMateria(etNombre.getText().toString().trim());
+
+            materiaManager.open();
+            boolean exito = materiaManager.actualizarMateria(materia);
+            materiaManager.close();
+
+            if (exito) {
+                Toast.makeText(this, "Materia actualizada", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Error al actualizar", Toast.LENGTH_SHORT).show();
+            }
+        });
+        builder.setNegativeButton("Cancelar", null);
+        builder.show();
+    }
+
+    // ==========================================
+    // ELIMINAR MATERIA
+    // ==========================================
+    private void mostrarDialogoEliminarMateria() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Eliminar Materia");
+        builder.setMessage("Ingrese la Clave de la Materia a eliminar:");
+
+        final EditText input = new EditText(this);
+        input.setHint("Clave de materia");
+        LinearLayout layout = new LinearLayout(this);
+        layout.setPadding(50, 20, 50, 10);
+        layout.addView(input);
+        builder.setView(layout);
+
+        builder.setPositiveButton("Eliminar", (dialog, which) -> {
+            String clave = input.getText().toString().trim();
+            materiaManager.open();
+            boolean exito = materiaManager.eliminarMateria(clave);
+            materiaManager.close();
+
+            if (exito) {
+                Toast.makeText(this, "Materia eliminada correctamente", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "No se encontró la materia o no se pudo eliminar", Toast.LENGTH_SHORT).show();
+            }
+        });
+        builder.setNegativeButton("Cancelar", null);
+        builder.show();
+    }
+
+    // ==========================================
+    // ASIGNAR MATERIA A ALUMNO
+    // ==========================================
+    private void mostrarDialogoAsignarMateriaAlumno() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Asignar Materia a Alumno");
+
+        LinearLayout layout = new LinearLayout(this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setPadding(50, 40, 50, 10);
+
+        final EditText etNumControl = new EditText(this);
+        etNumControl.setHint("Número de Control del Alumno");
+        layout.addView(etNumControl);
+
+        final EditText etClave = new EditText(this);
+        etClave.setHint("Clave de la Materia");
+        layout.addView(etClave);
+
+        final EditText etCalificacion = new EditText(this);
+        etCalificacion.setHint("Calificación (ej. 10.0)");
+        layout.addView(etCalificacion);
+
+        builder.setView(layout);
+
+        builder.setPositiveButton("Asignar", (dialog, which) -> {
+            String numControl = etNumControl.getText().toString().trim();
+            String clave = etClave.getText().toString().trim();
+            String calificacionStr = etCalificacion.getText().toString().trim();
+
+            if (numControl.isEmpty() || clave.isEmpty() || calificacionStr.isEmpty()) {
+                Toast.makeText(this, "Todos los campos son obligatorios", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            double calificacion = 0;
+            try {
+                calificacion = Double.parseDouble(calificacionStr);
+            } catch (Exception e) {
+                Toast.makeText(this, "Calificación inválida", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            alumnoManager.open();
+            boolean exito = alumnoManager.asignarMateria(numControl, clave, calificacion);
+            alumnoManager.close();
+
+            if (exito) {
+                Toast.makeText(this, "Materia asignada con éxito", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Error al asignar (¿Ya está asignada o no existe el alumno/materia?)", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        builder.setNegativeButton("Cancelar", null);
+        builder.show();
+    }
+
+    // ==========================================
+    // ASIGNAR MATERIA A DOCENTE
+    // ==========================================
+    private void mostrarDialogoAsignarMateriaDocente() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Asignar Materia a Docente");
+
+        LinearLayout layout = new LinearLayout(this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setPadding(50, 40, 50, 10);
+
+        final EditText etNumEmpleado = new EditText(this);
+        etNumEmpleado.setHint("Número de Empleado del Docente");
+        layout.addView(etNumEmpleado);
+
+        final EditText etClave = new EditText(this);
+        etClave.setHint("Clave de la Materia");
+        layout.addView(etClave);
+
+        builder.setView(layout);
+
+        builder.setPositiveButton("Asignar", (dialog, which) -> {
+            String numEmpleado = etNumEmpleado.getText().toString().trim();
+            String clave = etClave.getText().toString().trim();
+
+            if (numEmpleado.isEmpty() || clave.isEmpty()) {
+                Toast.makeText(this, "Todos los campos son obligatorios", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            docenteManager.open();
+            boolean exito = docenteManager.asignarMateria(numEmpleado, clave);
+            docenteManager.close();
+
+            if (exito) {
+                Toast.makeText(this, "Materia asignada con éxito", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Error al asignar (¿Ya está asignada o no existe el docente/materia?)", Toast.LENGTH_LONG).show();
+            }
+        });
+
         builder.setNegativeButton("Cancelar", null);
         builder.show();
     }

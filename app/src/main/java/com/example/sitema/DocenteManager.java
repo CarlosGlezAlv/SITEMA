@@ -112,6 +112,15 @@ public class DocenteManager {
         return rows > 0;
     }
 
+    public boolean asignarMateria(String numEmpleado, String claveMateria) {
+        ContentValues values = new ContentValues();
+        values.put(DatabaseHelper.COL_DM_NUM_EMPLEADO, numEmpleado);
+        values.put(DatabaseHelper.COL_DM_CLAVE_MATERIA, claveMateria);
+
+        long result = db.insert(DatabaseHelper.TABLA_DOCENTE_MATERIA, null, values);
+        return result != -1;
+    }
+
     public ArrayList<Alumno> obtenerAlumnosPorDocente(String numEmpleado) {
         ArrayList<Alumno> listaAlumnos = new ArrayList<>();
         String query = "SELECT a.* FROM " + DatabaseHelper.TABLA_ALUMNOS + " a" +
