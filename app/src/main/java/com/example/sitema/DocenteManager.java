@@ -144,4 +144,40 @@ public class DocenteManager {
         }
         return listaAlumnos;
     }
+
+    /**
+     * Obtiene las materias que un alumno cursa Y que también imparte este docente,
+     * junto con la calificación del alumno en dichas materias.
+     */
+    public ArrayList<MateriaCursada> obtenerMateriasDeAlumnoPorDocente(String numEmpleado, String numControl) {
+        ArrayList<MateriaCursada> lista = new ArrayList<>();
+        String query =
+            "SELECT m." + DatabaseHelper.COL_MATERIA_CLAVE +
+            ", m." + DatabaseHelper.COL_MATERIA_NOMBRE +
+            ", am." + DatabaseHelper.COL_AM_CALIFICACION +
+            " FROM " + DatabaseHelper.TABLA_MATERIAS + " m" +
+            " INNER JOIN " + DatabaseHelper.TABLA_ALUMNO_MATERIA + " am" +
+            " ON m." + DatabaseHelper.COL_MATERIA_CLAVE + " = am." + DatabaseHelper.COL_AM_CLAVE_MATERIA +
+            " INNER JOIN " + DatabaseHelper.TABLA_DOCENTE_MATERIA + " dm" +
+            " ON m." + DatabaseHelper.COL_MATERIA_CLAVE + " = dm." + DatabaseHelper.COL_DM_CLAVE_MATERIA +
+            " WHERE am." + DatabaseHelper.COL_AM_NUM_CONTROL + " = ?" +
+            " AND dm." + DatabaseHelper.COL_DM_NUM_EMPLEADO + " = ?";
+
+        Cursor cursor = db.rawQuery(query, new String[]{numControl, numEmpleado});
+
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                do {
+                    MateriaCursada mc = new MateriaCursada();
+                    mc.setClaveMateria(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_MATERIA_CLAVE)));
+                    mc.setNombreMateria(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_MATERIA_NOMBRE)));
+                    mc.setCalificacion(cursor.getDouble(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_AM_CALIFICACION)));
+                    lista.add(mc);
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+        }
+        return lista;
+    }
 }
+

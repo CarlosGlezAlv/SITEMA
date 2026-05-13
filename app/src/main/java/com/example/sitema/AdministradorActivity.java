@@ -1,11 +1,13 @@
 package com.example.sitema;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import java.util.ArrayList;
 
@@ -19,6 +21,15 @@ public class AdministradorActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_administrador);
+
+        // Toolbar con navegación de regreso (cerrar sesión)
+        MaterialToolbar toolbar = findViewById(R.id.toolbar_admin);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+        toolbar.setNavigationOnClickListener(v -> cerrarSesion());
 
         alumnoManager = new AlumnoManager(this);
         docenteManager = new DocenteManager(this);
@@ -53,6 +64,9 @@ public class AdministradorActivity extends AppCompatActivity {
 
         MaterialButton btnAsignarMateriaDocente = findViewById(R.id.btn_asignar_materia_docente);
         btnAsignarMateriaDocente.setOnClickListener(v -> mostrarDialogoAsignarMateriaDocente());
+
+        MaterialButton btnAsignarAlumnoDocente = findViewById(R.id.btn_asignar_alumno_docente);
+        btnAsignarAlumnoDocente.setOnClickListener(v -> mostrarDialogoAsignarAlumnoDocente());
 
         // Referencias a los botones de la sección MATERIAS
         MaterialButton btnAltaMateria = findViewById(R.id.btn_alta_materia);
@@ -680,5 +694,60 @@ public class AdministradorActivity extends AppCompatActivity {
 
         builder.setNegativeButton("Cancelar", null);
         builder.show();
+    }
+
+    // ==========================================
+    // ASIGNAR ALUMNO A DOCENTE
+    // ==========================================
+    private void mostrarDialogoAsignarAlumnoDocente() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Asignar Alumno a Docente");
+
+        LinearLayout layout = new LinearLayout(this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setPadding(50, 40, 50, 10);
+
+        final EditText etNumEmpleado = new EditText(this);
+        etNumEmpleado.setHint("Número de Empleado del Docente");
+        layout.addView(etNumEmpleado);
+
+        final EditText etNumControl = new EditText(this);
+        etNumControl.setHint("Número de Control del Alumno");
+        layout.addView(etNumControl);
+
+        builder.setView(layout);
+
+        builder.setPositiveButton("Asignar", (dialog, which) -> {
+            String numEmpleado = etNumEmpleado.getText().toString().trim();
+            String numControl = etNumControl.getText().toString().trim();
+
+            if (numEmpleado.isEmpty() || numControl.isEmpty()) {
+                Toast.makeText(this, "Todos los campos son obligatorios", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            docenteManager.open();
+            boolean exito = docenteManager.asignarAlumno(numEmpleado, numControl);
+            docenteManager.close();
+
+            if (exito) {
+                Toast.makeText(this, "Alumno asignado al docente con éxito", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Error al asignar (¿Ya está asignado o no existe el docente/alumno?)", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        builder.setNegativeButton("Cancelar", null);
+        builder.show();
+    }
+
+    // ==========================================
+    // CERRAR SESIÓN
+    // ==========================================
+    private void cerrarSesion() {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
     }
 }

@@ -118,7 +118,8 @@ public class AlumnoManager {
 
     public ArrayList<MateriaCursada> obtenerMateriasYCalificaciones(String numControl) {
         ArrayList<MateriaCursada> listaMaterias = new ArrayList<>();
-        String query = "SELECT m." + DatabaseHelper.COL_MATERIA_NOMBRE + ", am." + DatabaseHelper.COL_AM_CALIFICACION +
+        String query = "SELECT m." + DatabaseHelper.COL_MATERIA_CLAVE + ", m." + DatabaseHelper.COL_MATERIA_NOMBRE +
+                ", am." + DatabaseHelper.COL_AM_CALIFICACION +
                 " FROM " + DatabaseHelper.TABLA_MATERIAS + " m" +
                 " INNER JOIN " + DatabaseHelper.TABLA_ALUMNO_MATERIA + " am" +
                 " ON m." + DatabaseHelper.COL_MATERIA_CLAVE + " = am." + DatabaseHelper.COL_AM_CLAVE_MATERIA +
@@ -130,6 +131,7 @@ public class AlumnoManager {
             if (cursor.moveToFirst()) {
                 do {
                     MateriaCursada mc = new MateriaCursada();
+                    mc.setClaveMateria(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_MATERIA_CLAVE)));
                     mc.setNombreMateria(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_MATERIA_NOMBRE)));
                     mc.setCalificacion(cursor.getDouble(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_AM_CALIFICACION)));
                     listaMaterias.add(mc);

@@ -1,21 +1,23 @@
 package com.example.sitema;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
 
 public class AlumnosActivity extends AppCompatActivity {
-    
+
     private TextInputEditText etNoControl, etNombre, etTelefono;
     private RecyclerView rvMaterias;
     private TextView tvSinMaterias, tvPromedio;
-    
+
     private AlumnoManager alumnoManager;
 
     @Override
@@ -23,13 +25,22 @@ public class AlumnosActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alumnos);
 
-        etNoControl = findViewById(R.id.et_no_control);
-        etNombre = findViewById(R.id.et_nombre);
-        etTelefono = findViewById(R.id.et_telefono);
-        rvMaterias = findViewById(R.id.rv_materias);
+        // Toolbar con botón de regreso → cerrar sesión
+        MaterialToolbar toolbar = findViewById(R.id.toolbar_alumnos);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+        toolbar.setNavigationOnClickListener(v -> cerrarSesion());
+
+        etNoControl  = findViewById(R.id.et_no_control);
+        etNombre     = findViewById(R.id.et_nombre);
+        etTelefono   = findViewById(R.id.et_telefono);
+        rvMaterias   = findViewById(R.id.rv_materias);
         tvSinMaterias = findViewById(R.id.tv_sin_materias);
-        tvPromedio = findViewById(R.id.tv_promedio);
-        
+        tvPromedio   = findViewById(R.id.tv_promedio);
+
         alumnoManager = new AlumnoManager(this);
 
         String idUsuario = getIntent().getStringExtra("ID_USUARIO");
@@ -41,24 +52,24 @@ public class AlumnosActivity extends AppCompatActivity {
     private void cargarDatosAlumno(String numControl) {
         alumnoManager.open();
         Alumno alumno = alumnoManager.obtenerAlumnoPorControl(numControl);
-        
+
         if (alumno != null) {
-            // Deshabilitar la edición ya que es solo vista para el alumno
+            // Solo lectura: el alumno solo consulta su información
             etNoControl.setText(alumno.getNumControl());
             etNoControl.setFocusable(false);
             etNoControl.setClickable(false);
-            
+
             etNombre.setText(alumno.getNombre());
             etNombre.setFocusable(false);
             etNombre.setClickable(false);
-            
+
             etTelefono.setText(alumno.getTelefono());
             etTelefono.setFocusable(false);
             etTelefono.setClickable(false);
-            
-            // Cargar materias
+
+            // Cargar materias con calificaciones
             ArrayList<MateriaCursada> materias = alumnoManager.obtenerMateriasYCalificaciones(numControl);
-            
+
             if (materias == null || materias.isEmpty()) {
                 rvMaterias.setVisibility(View.GONE);
                 tvSinMaterias.setVisibility(View.VISIBLE);
@@ -66,11 +77,11 @@ public class AlumnosActivity extends AppCompatActivity {
             } else {
                 rvMaterias.setVisibility(View.VISIBLE);
                 tvSinMaterias.setVisibility(View.GONE);
-                
+
                 rvMaterias.setLayoutManager(new LinearLayoutManager(this));
                 MateriaAdapter adapter = new MateriaAdapter(materias);
                 rvMaterias.setAdapter(adapter);
-                
+
                 double suma = 0;
                 for (MateriaCursada m : materias) {
                     suma += m.getCalificacion();
@@ -79,7 +90,14 @@ public class AlumnosActivity extends AppCompatActivity {
                 tvPromedio.setText(String.format("%.2f", promedio));
             }
         }
-        
+
         alumnoManager.close();
+    }
+
+    private void cerrarSesion() {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
     }
 }
