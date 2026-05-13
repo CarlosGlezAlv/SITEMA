@@ -82,6 +82,12 @@ public class MateriaManager {
     }
 
     public boolean eliminarMateria(String clave) {
+        // Eliminar dependencias por Foreign Keys
+        db.delete(DatabaseHelper.TABLA_ALUMNO_MATERIA,
+                DatabaseHelper.COL_AM_CLAVE_MATERIA + "=?", new String[]{clave});
+        db.delete(DatabaseHelper.TABLA_DOCENTE_MATERIA,
+                DatabaseHelper.COL_DM_CLAVE_MATERIA + "=?", new String[]{clave});
+
         int rows = db.delete(DatabaseHelper.TABLA_MATERIAS,
                 DatabaseHelper.COL_MATERIA_CLAVE + "=?",
                 new String[]{clave});

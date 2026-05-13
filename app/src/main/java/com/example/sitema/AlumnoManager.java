@@ -86,6 +86,12 @@ public class AlumnoManager {
     }
 
     public boolean eliminarAlumno(String numControl) {
+        // Eliminar dependencias por Foreign Keys
+        db.delete(DatabaseHelper.TABLA_ALUMNO_MATERIA,
+                DatabaseHelper.COL_AM_NUM_CONTROL + "=?", new String[]{numControl});
+        db.delete(DatabaseHelper.TABLA_DOCENTE_ALUMNO,
+                DatabaseHelper.COL_DA_NUM_CONTROL + "=?", new String[]{numControl});
+
         int rows = db.delete(DatabaseHelper.TABLA_ALUMNOS,
                 DatabaseHelper.COL_ALUMNO_NUM_CONTROL + "=?",
                 new String[]{numControl});

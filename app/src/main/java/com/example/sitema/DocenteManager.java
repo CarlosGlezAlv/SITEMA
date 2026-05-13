@@ -86,6 +86,12 @@ public class DocenteManager {
     }
 
     public boolean eliminarDocente(String numEmpleado) {
+        // Eliminar dependencias por Foreign Keys
+        db.delete(DatabaseHelper.TABLA_DOCENTE_ALUMNO,
+                DatabaseHelper.COL_DA_NUM_EMPLEADO + "=?", new String[]{numEmpleado});
+        db.delete(DatabaseHelper.TABLA_DOCENTE_MATERIA,
+                DatabaseHelper.COL_DM_NUM_EMPLEADO + "=?", new String[]{numEmpleado});
+
         int rows = db.delete(DatabaseHelper.TABLA_DOCENTES,
                 DatabaseHelper.COL_DOCENTE_NUM_EMPLEADO + "=?",
                 new String[]{numEmpleado});
