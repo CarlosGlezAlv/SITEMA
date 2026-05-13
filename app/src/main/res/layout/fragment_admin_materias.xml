@@ -167,17 +167,6 @@
                         android:textSize="11sp"
                         android:textStyle="bold" />
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.8"
-                        android:paddingEnd="10dp"
-                        android:text="Créd."
-                        android:textAlignment="textEnd"
-                        android:textColor="@color/tec_red"
-                        android:textSize="11sp"
-                        android:textStyle="bold" />
-
                 </LinearLayout>
 
                 <androidx.recyclerview.widget.RecyclerView

@@ -34,7 +34,6 @@ public class AdminMateriaAdapter extends RecyclerView.Adapter<AdminMateriaAdapte
         Materia m = lista.get(position);
         holder.tvClave.setText(m.getClaveMateria());
         holder.tvNombre.setText(m.getNombreMateria());
-        holder.tvCreditos.setText("—");   // Materia no tiene créditos aún
         int bgColor = (position % 2 == 0) ? 0xFFF9F9F9 : 0xFFFFFFFF;
         holder.itemView.setBackgroundColor(bgColor);
     }
@@ -45,13 +44,12 @@ public class AdminMateriaAdapter extends RecyclerView.Adapter<AdminMateriaAdapte
     }
 
     static class VH extends RecyclerView.ViewHolder {
-        TextView tvClave, tvNombre, tvCreditos;
+        TextView tvClave, tvNombre;
 
         VH(@NonNull View itemView) {
             super(itemView);
             tvClave    = itemView.findViewById(R.id.tv_admin_materia_clave);
             tvNombre   = itemView.findViewById(R.id.tv_admin_materia_nombre);
-            tvCreditos = itemView.findViewById(R.id.tv_admin_materia_creditos);
         }
     }
 }
