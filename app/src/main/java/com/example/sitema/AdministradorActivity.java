@@ -2,11 +2,14 @@ package com.example.sitema;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import java.util.ArrayList;
@@ -17,12 +20,22 @@ public class AdministradorActivity extends AppCompatActivity {
     private DocenteManager docenteManager;
     private MateriaManager materiaManager;
 
+    // Adapters para las tablas
+    private AdminAlumnoAdapter adapterAlumnos;
+    private AdminDocenteAdapter adapterDocentes;
+    private AdminMateriaAdapter adapterMaterias;
+
+    // Views de estado vacío
+    private TextView tvSinAlumnos;
+    private TextView tvSinDocentes;
+    private TextView tvSinMaterias;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_administrador);
 
-        // Toolbar con navegación de regreso (cerrar sesión)
+        // Toolbar
         MaterialToolbar toolbar = findViewById(R.id.toolbar_admin);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
@@ -35,30 +48,44 @@ public class AdministradorActivity extends AppCompatActivity {
         docenteManager = new DocenteManager(this);
         materiaManager = new MateriaManager(this);
 
-        // Referencias a los botones de la sección ALUMNOS
-        MaterialButton btnAltaAlumno = findViewById(R.id.btn_alta_alumno);
-        MaterialButton btnVerAlumno = findViewById(R.id.btn_ver_alumno);
-        MaterialButton btnEditarAlumno = findViewById(R.id.btn_editar_alumno);
+        // --- Configurar RecyclerViews de las tablas ---
+        tvSinAlumnos  = findViewById(R.id.tv_admin_sin_alumnos);
+        tvSinDocentes = findViewById(R.id.tv_admin_sin_docentes);
+        tvSinMaterias = findViewById(R.id.tv_admin_sin_materias);
+
+        adapterAlumnos  = new AdminAlumnoAdapter(new ArrayList<>());
+        adapterDocentes = new AdminDocenteAdapter(new ArrayList<>());
+        adapterMaterias = new AdminMateriaAdapter(new ArrayList<>());
+
+        RecyclerView rvAlumnos  = findViewById(R.id.rv_admin_alumnos);
+        RecyclerView rvDocentes = findViewById(R.id.rv_admin_docentes);
+        RecyclerView rvMaterias = findViewById(R.id.rv_admin_materias);
+
+        rvAlumnos.setAdapter(adapterAlumnos);
+        rvDocentes.setAdapter(adapterDocentes);
+        rvMaterias.setAdapter(adapterMaterias);
+
+        // Carga inicial de tablas
+        cargarTablas();
+
+        // --- Botones ALUMNOS ---
+        MaterialButton btnAltaAlumno    = findViewById(R.id.btn_alta_alumno);
+        MaterialButton btnEditarAlumno  = findViewById(R.id.btn_editar_alumno);
         MaterialButton btnEliminarAlumno = findViewById(R.id.btn_eliminar_alumno);
 
-        // Eventos clic ALUMNOS
         btnAltaAlumno.setOnClickListener(v -> mostrarDialogoAltaAlumno());
-        btnVerAlumno.setOnClickListener(v -> mostrarDialogoVerAlumnos());
         btnEditarAlumno.setOnClickListener(v -> mostrarDialogoBuscarParaEditar());
         btnEliminarAlumno.setOnClickListener(v -> mostrarDialogoEliminar());
 
         MaterialButton btnAsignarMateriaAlumno = findViewById(R.id.btn_asignar_materia_alumno);
         btnAsignarMateriaAlumno.setOnClickListener(v -> mostrarDialogoAsignarMateriaAlumno());
 
-        // Referencias a los botones de la sección DOCENTES
-        MaterialButton btnAltaDocente = findViewById(R.id.btn_alta_docente);
-        MaterialButton btnVerDocente = findViewById(R.id.btn_ver_docente);
-        MaterialButton btnEditarDocente = findViewById(R.id.btn_editar_docente);
+        // --- Botones DOCENTES ---
+        MaterialButton btnAltaDocente    = findViewById(R.id.btn_alta_docente);
+        MaterialButton btnEditarDocente  = findViewById(R.id.btn_editar_docente);
         MaterialButton btnEliminarDocente = findViewById(R.id.btn_eliminar_docente);
 
-        // Eventos clic DOCENTES
         btnAltaDocente.setOnClickListener(v -> mostrarDialogoAltaDocente());
-        btnVerDocente.setOnClickListener(v -> mostrarDialogoVerDocentes());
         btnEditarDocente.setOnClickListener(v -> mostrarDialogoBuscarParaEditarDocente());
         btnEliminarDocente.setOnClickListener(v -> mostrarDialogoEliminarDocente());
 
@@ -68,17 +95,40 @@ public class AdministradorActivity extends AppCompatActivity {
         MaterialButton btnAsignarAlumnoDocente = findViewById(R.id.btn_asignar_alumno_docente);
         btnAsignarAlumnoDocente.setOnClickListener(v -> mostrarDialogoAsignarAlumnoDocente());
 
-        // Referencias a los botones de la sección MATERIAS
-        MaterialButton btnAltaMateria = findViewById(R.id.btn_alta_materia);
-        MaterialButton btnVerMateria = findViewById(R.id.btn_ver_materia);
-        MaterialButton btnEditarMateria = findViewById(R.id.btn_editar_materia);
+        // --- Botones MATERIAS ---
+        MaterialButton btnAltaMateria    = findViewById(R.id.btn_alta_materia);
+        MaterialButton btnEditarMateria  = findViewById(R.id.btn_editar_materia);
         MaterialButton btnEliminarMateria = findViewById(R.id.btn_eliminar_materia);
 
-        // Eventos clic MATERIAS
         btnAltaMateria.setOnClickListener(v -> mostrarDialogoAltaMateria());
-        btnVerMateria.setOnClickListener(v -> mostrarDialogoVerMaterias());
         btnEditarMateria.setOnClickListener(v -> mostrarDialogoBuscarParaEditarMateria());
         btnEliminarMateria.setOnClickListener(v -> mostrarDialogoEliminarMateria());
+    }
+
+    // ==========================================
+    // CARGAR TABLAS
+    // ==========================================
+    private void cargarTablas() {
+        // Alumnos
+        alumnoManager.open();
+        ArrayList<Alumno> listaA = alumnoManager.obtenerTodosLosAlumnos();
+        alumnoManager.close();
+        adapterAlumnos.actualizar(listaA);
+        tvSinAlumnos.setVisibility(listaA.isEmpty() ? View.VISIBLE : View.GONE);
+
+        // Docentes
+        docenteManager.open();
+        ArrayList<Docente> listaD = docenteManager.obtenerTodosLosDocentes();
+        docenteManager.close();
+        adapterDocentes.actualizar(listaD);
+        tvSinDocentes.setVisibility(listaD.isEmpty() ? View.VISIBLE : View.GONE);
+
+        // Materias
+        materiaManager.open();
+        ArrayList<Materia> listaM = materiaManager.obtenerTodasLasMaterias();
+        materiaManager.close();
+        adapterMaterias.actualizar(listaM);
+        tvSinMaterias.setVisibility(listaM.isEmpty() ? View.VISIBLE : View.GONE);
     }
 
     // ==========================================
@@ -122,6 +172,7 @@ public class AdministradorActivity extends AppCompatActivity {
 
             if (exito) {
                 Toast.makeText(this, "Alumno guardado con éxito", Toast.LENGTH_SHORT).show();
+                cargarTablas();
             } else {
                 Toast.makeText(this, "Error al guardar (El ID ya existe)", Toast.LENGTH_SHORT).show();
             }
@@ -216,6 +267,7 @@ public class AdministradorActivity extends AppCompatActivity {
 
             if (exito) {
                 Toast.makeText(this, "Alumno actualizado", Toast.LENGTH_SHORT).show();
+                cargarTablas();
             } else {
                 Toast.makeText(this, "Error al actualizar", Toast.LENGTH_SHORT).show();
             }
@@ -247,6 +299,7 @@ public class AdministradorActivity extends AppCompatActivity {
 
             if (exito) {
                 Toast.makeText(this, "Alumno eliminado correctamente", Toast.LENGTH_SHORT).show();
+                cargarTablas();
             } else {
                 Toast.makeText(this, "No se encontró el alumno o no se pudo eliminar", Toast.LENGTH_SHORT).show();
             }
@@ -296,6 +349,7 @@ public class AdministradorActivity extends AppCompatActivity {
 
             if (exito) {
                 Toast.makeText(this, "Docente guardado con éxito", Toast.LENGTH_SHORT).show();
+                cargarTablas();
             } else {
                 Toast.makeText(this, "Error al guardar (El ID ya existe)", Toast.LENGTH_SHORT).show();
             }
@@ -390,6 +444,7 @@ public class AdministradorActivity extends AppCompatActivity {
 
             if (exito) {
                 Toast.makeText(this, "Docente actualizado", Toast.LENGTH_SHORT).show();
+                cargarTablas();
             } else {
                 Toast.makeText(this, "Error al actualizar", Toast.LENGTH_SHORT).show();
             }
@@ -421,6 +476,7 @@ public class AdministradorActivity extends AppCompatActivity {
 
             if (exito) {
                 Toast.makeText(this, "Docente eliminado correctamente", Toast.LENGTH_SHORT).show();
+                cargarTablas();
             } else {
                 Toast.makeText(this, "No se encontró el docente o no se pudo eliminar", Toast.LENGTH_SHORT).show();
             }
@@ -465,6 +521,7 @@ public class AdministradorActivity extends AppCompatActivity {
 
             if (exito) {
                 Toast.makeText(this, "Materia guardada con éxito", Toast.LENGTH_SHORT).show();
+                cargarTablas();
             } else {
                 Toast.makeText(this, "Error al guardar (La clave ya existe)", Toast.LENGTH_SHORT).show();
             }
@@ -554,6 +611,7 @@ public class AdministradorActivity extends AppCompatActivity {
 
             if (exito) {
                 Toast.makeText(this, "Materia actualizada", Toast.LENGTH_SHORT).show();
+                cargarTablas();
             } else {
                 Toast.makeText(this, "Error al actualizar", Toast.LENGTH_SHORT).show();
             }
@@ -585,6 +643,7 @@ public class AdministradorActivity extends AppCompatActivity {
 
             if (exito) {
                 Toast.makeText(this, "Materia eliminada correctamente", Toast.LENGTH_SHORT).show();
+                cargarTablas();
             } else {
                 Toast.makeText(this, "No se encontró la materia o no se pudo eliminar", Toast.LENGTH_SHORT).show();
             }
