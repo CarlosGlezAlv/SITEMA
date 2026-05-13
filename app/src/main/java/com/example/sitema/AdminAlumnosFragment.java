@@ -21,6 +21,7 @@ public class AdminAlumnosFragment extends Fragment {
     private AlumnoManager alumnoManager;
     private AdminAlumnoAdapter adapterAlumnos;
     private TextView tvSinAlumnos;
+    private ArrayList<Alumno> listaCompletaAlumnos = new ArrayList<>();
 
     @Nullable
     @Override
@@ -44,6 +45,20 @@ public class AdminAlumnosFragment extends Fragment {
         btnEliminarAlumno.setOnClickListener(v -> mostrarDialogoEliminar());
         btnAsignarMateriaAlumno.setOnClickListener(v -> mostrarDialogoAsignarMateriaAlumno());
 
+        EditText etBuscarAlumno = view.findViewById(R.id.et_buscar_alumno);
+        etBuscarAlumno.addTextChangedListener(new android.text.TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                filtrarAlumnos(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(android.text.Editable s) {}
+        });
+
         cargarTabla();
 
         return view;
@@ -51,10 +66,29 @@ public class AdminAlumnosFragment extends Fragment {
 
     private void cargarTabla() {
         alumnoManager.open();
-        ArrayList<Alumno> listaA = alumnoManager.obtenerTodosLosAlumnos();
+        listaCompletaAlumnos = alumnoManager.obtenerTodosLosAlumnos();
         alumnoManager.close();
-        adapterAlumnos.actualizar(listaA);
-        tvSinAlumnos.setVisibility(listaA.isEmpty() ? View.VISIBLE : View.GONE);
+        
+        EditText etBuscar = getView() != null ? getView().findViewById(R.id.et_buscar_alumno) : null;
+        if (etBuscar != null && !etBuscar.getText().toString().isEmpty()) {
+            filtrarAlumnos(etBuscar.getText().toString());
+        } else {
+            adapterAlumnos.actualizar(listaCompletaAlumnos);
+            tvSinAlumnos.setVisibility(listaCompletaAlumnos.isEmpty() ? View.VISIBLE : View.GONE);
+        }
+    }
+
+    private void filtrarAlumnos(String query) {
+        ArrayList<Alumno> filtrada = new ArrayList<>();
+        String lowerQuery = query.toLowerCase();
+        for (Alumno a : listaCompletaAlumnos) {
+            if (a.getNumControl().toLowerCase().contains(lowerQuery) ||
+                a.getNombre().toLowerCase().contains(lowerQuery)) {
+                filtrada.add(a);
+            }
+        }
+        adapterAlumnos.actualizar(filtrada);
+        tvSinAlumnos.setVisibility(filtrada.isEmpty() ? View.VISIBLE : View.GONE);
     }
 
     private void mostrarDialogoAltaAlumno() {

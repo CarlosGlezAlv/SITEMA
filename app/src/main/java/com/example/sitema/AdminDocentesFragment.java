@@ -21,6 +21,7 @@ public class AdminDocentesFragment extends Fragment {
     private DocenteManager docenteManager;
     private AdminDocenteAdapter adapterDocentes;
     private TextView tvSinDocentes;
+    private ArrayList<Docente> listaCompletaDocentes = new ArrayList<>();
 
     @Nullable
     @Override
@@ -46,6 +47,20 @@ public class AdminDocentesFragment extends Fragment {
         btnAsignarMateriaDocente.setOnClickListener(v -> mostrarDialogoAsignarMateriaDocente());
         btnAsignarAlumnoDocente.setOnClickListener(v -> mostrarDialogoAsignarAlumnoDocente());
 
+        EditText etBuscarDocente = view.findViewById(R.id.et_buscar_docente);
+        etBuscarDocente.addTextChangedListener(new android.text.TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                filtrarDocentes(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(android.text.Editable s) {}
+        });
+
         cargarTabla();
 
         return view;
@@ -53,10 +68,29 @@ public class AdminDocentesFragment extends Fragment {
 
     private void cargarTabla() {
         docenteManager.open();
-        ArrayList<Docente> listaD = docenteManager.obtenerTodosLosDocentes();
+        listaCompletaDocentes = docenteManager.obtenerTodosLosDocentes();
         docenteManager.close();
-        adapterDocentes.actualizar(listaD);
-        tvSinDocentes.setVisibility(listaD.isEmpty() ? View.VISIBLE : View.GONE);
+        
+        EditText etBuscar = getView() != null ? getView().findViewById(R.id.et_buscar_docente) : null;
+        if (etBuscar != null && !etBuscar.getText().toString().isEmpty()) {
+            filtrarDocentes(etBuscar.getText().toString());
+        } else {
+            adapterDocentes.actualizar(listaCompletaDocentes);
+            tvSinDocentes.setVisibility(listaCompletaDocentes.isEmpty() ? View.VISIBLE : View.GONE);
+        }
+    }
+
+    private void filtrarDocentes(String query) {
+        ArrayList<Docente> filtrada = new ArrayList<>();
+        String lowerQuery = query.toLowerCase();
+        for (Docente d : listaCompletaDocentes) {
+            if (d.getNumEmpleado().toLowerCase().contains(lowerQuery) ||
+                d.getNombre().toLowerCase().contains(lowerQuery)) {
+                filtrada.add(d);
+            }
+        }
+        adapterDocentes.actualizar(filtrada);
+        tvSinDocentes.setVisibility(filtrada.isEmpty() ? View.VISIBLE : View.GONE);
     }
 
     private void mostrarDialogoAltaDocente() {

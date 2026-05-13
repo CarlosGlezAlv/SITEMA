@@ -21,6 +21,7 @@ public class AdminMateriasFragment extends Fragment {
     private MateriaManager materiaManager;
     private AdminMateriaAdapter adapterMaterias;
     private TextView tvSinMaterias;
+    private ArrayList<Materia> listaCompletaMaterias = new ArrayList<>();
 
     @Nullable
     @Override
@@ -42,6 +43,20 @@ public class AdminMateriasFragment extends Fragment {
         btnEditarMateria.setOnClickListener(v -> mostrarDialogoBuscarParaEditarMateria());
         btnEliminarMateria.setOnClickListener(v -> mostrarDialogoEliminarMateria());
 
+        EditText etBuscarMateria = view.findViewById(R.id.et_buscar_materia);
+        etBuscarMateria.addTextChangedListener(new android.text.TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                filtrarMaterias(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(android.text.Editable s) {}
+        });
+
         cargarTabla();
 
         return view;
@@ -49,10 +64,29 @@ public class AdminMateriasFragment extends Fragment {
 
     private void cargarTabla() {
         materiaManager.open();
-        ArrayList<Materia> listaM = materiaManager.obtenerTodasLasMaterias();
+        listaCompletaMaterias = materiaManager.obtenerTodasLasMaterias();
         materiaManager.close();
-        adapterMaterias.actualizar(listaM);
-        tvSinMaterias.setVisibility(listaM.isEmpty() ? View.VISIBLE : View.GONE);
+        
+        EditText etBuscar = getView() != null ? getView().findViewById(R.id.et_buscar_materia) : null;
+        if (etBuscar != null && !etBuscar.getText().toString().isEmpty()) {
+            filtrarMaterias(etBuscar.getText().toString());
+        } else {
+            adapterMaterias.actualizar(listaCompletaMaterias);
+            tvSinMaterias.setVisibility(listaCompletaMaterias.isEmpty() ? View.VISIBLE : View.GONE);
+        }
+    }
+
+    private void filtrarMaterias(String query) {
+        ArrayList<Materia> filtrada = new ArrayList<>();
+        String lowerQuery = query.toLowerCase();
+        for (Materia m : listaCompletaMaterias) {
+            if (m.getClaveMateria().toLowerCase().contains(lowerQuery) ||
+                m.getNombreMateria().toLowerCase().contains(lowerQuery)) {
+                filtrada.add(m);
+            }
+        }
+        adapterMaterias.actualizar(filtrada);
+        tvSinMaterias.setVisibility(filtrada.isEmpty() ? View.VISIBLE : View.GONE);
     }
 
     private void mostrarDialogoAltaMateria() {
