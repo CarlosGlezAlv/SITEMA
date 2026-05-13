@@ -34,14 +34,65 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- ALUMNOS -->
+            <!-- BANNER DE BIENVENIDA -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="6dp"
+                app:cardBackgroundColor="@color/tec_red">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="20dp"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:src="@android:drawable/ic_menu_manage"
+                        android:tint="@color/white"
+                        android:layout_marginEnd="16dp" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Panel de Administrador"
+                            android:textColor="@color/white"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Gestión completa del sistema"
+                            android:textColor="#CCFFFFFF"
+                            android:textSize="12sp"
+                            android:layout_marginTop="2dp" />
+
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- ═══════════════════════════════ -->
+            <!-- SECCIÓN: ALUMNOS               -->
+            <!-- ═══════════════════════════════ -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="4dp"
-                app:cardBackgroundColor="@color/white"
-                android:layout_marginBottom="16dp">
+                app:cardBackgroundColor="@color/white">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -49,56 +100,98 @@
                     android:orientation="vertical"
                     android:padding="20dp">
 
-                    <TextView
+                    <!-- Encabezado sección -->
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/admin_alumnos"
-                        android:textColor="@color/tec_red"
-                        android:textSize="13sp"
-                        android:textStyle="bold" />
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginBottom="4dp">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@android:drawable/ic_menu_myplaces"
+                            android:tint="@color/tec_red"
+                            android:layout_marginEnd="8dp" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/admin_alumnos"
+                            android:textColor="@color/tec_red"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="14dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="16dp"
                         android:background="@color/tec_red_light" />
 
-                    <GridLayout
+                    <!-- Fila 1: Alta | Ver -->
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:columnCount="2"
-                        android:rowCount="2"
-                        android:useDefaultMargins="true">
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="8dp">
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btn_alta_alumno"
-                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                            style="@style/Widget.MaterialComponents.Button"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_columnWeight="1"
+                            android:layout_weight="1"
+                            android:layout_marginEnd="6dp"
                             android:text="@string/admin_btn_alta"
-                            android:textColor="@color/tec_red"
-                            app:strokeColor="@color/tec_red" />
+                            android:textSize="13sp"
+                            app:icon="@android:drawable/ic_input_add"
+                            app:iconGravity="textStart"
+                            app:iconSize="16dp"
+                            android:backgroundTint="@color/tec_red" />
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btn_ver_alumno"
                             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_columnWeight="1"
+                            android:layout_weight="1"
+                            android:layout_marginStart="6dp"
                             android:text="@string/admin_btn_ver"
+                            android:textSize="13sp"
                             android:textColor="@color/tec_red"
+                            app:icon="@android:drawable/ic_menu_view"
+                            app:iconGravity="textStart"
+                            app:iconSize="16dp"
+                            app:iconTint="@color/tec_red"
                             app:strokeColor="@color/tec_red" />
+
+                    </LinearLayout>
+
+                    <!-- Fila 2: Editar | Eliminar -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="8dp">
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btn_editar_alumno"
                             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_columnWeight="1"
+                            android:layout_weight="1"
+                            android:layout_marginEnd="6dp"
                             android:text="@string/admin_btn_editar"
+                            android:textSize="13sp"
                             android:textColor="@color/tec_red"
+                            app:icon="@android:drawable/ic_menu_edit"
+                            app:iconGravity="textStart"
+                            app:iconSize="16dp"
+                            app:iconTint="@color/tec_red"
                             app:strokeColor="@color/tec_red" />
 
                         <com.google.android.material.button.MaterialButton
@@ -106,34 +199,54 @@
                             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_columnWeight="1"
+                            android:layout_weight="1"
+                            android:layout_marginStart="6dp"
                             android:text="@string/admin_btn_eliminar"
+                            android:textSize="13sp"
                             android:textColor="@color/danger"
+                            app:icon="@android:drawable/ic_menu_delete"
+                            app:iconGravity="textStart"
+                            app:iconSize="16dp"
+                            app:iconTint="@color/danger"
                             app:strokeColor="@color/danger" />
 
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btn_asignar_materia_alumno"
-                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_columnSpan="2"
-                            android:layout_columnWeight="1"
-                            android:text="Asignar Materia"
-                            android:textColor="@color/tec_red"
-                            app:strokeColor="@color/tec_red" />
+                    </LinearLayout>
 
-                    </GridLayout>
+                    <!-- Separador y botón Asignar Materia -->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginBottom="10dp"
+                        android:background="@color/tec_red_light" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_asignar_materia_alumno"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Asignar Materia a Alumno"
+                        android:textSize="13sp"
+                        android:textColor="@color/tec_red"
+                        app:icon="@android:drawable/ic_menu_agenda"
+                        app:iconGravity="textStart"
+                        app:iconSize="16dp"
+                        app:iconTint="@color/tec_red"
+                        app:strokeColor="@color/tec_red" />
+
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- DOCENTES -->
+            <!-- ═══════════════════════════════ -->
+            <!-- SECCIÓN: DOCENTES              -->
+            <!-- ═══════════════════════════════ -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="4dp"
-                app:cardBackgroundColor="@color/white"
-                android:layout_marginBottom="16dp">
+                app:cardBackgroundColor="@color/white">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -141,56 +254,98 @@
                     android:orientation="vertical"
                     android:padding="20dp">
 
-                    <TextView
+                    <!-- Encabezado sección -->
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/admin_docentes"
-                        android:textColor="@color/tec_red"
-                        android:textSize="13sp"
-                        android:textStyle="bold" />
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginBottom="4dp">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@android:drawable/ic_menu_myplaces"
+                            android:tint="@color/tec_red"
+                            android:layout_marginEnd="8dp" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/admin_docentes"
+                            android:textColor="@color/tec_red"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="14dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="16dp"
                         android:background="@color/tec_red_light" />
 
-                    <GridLayout
+                    <!-- Fila 1: Alta | Ver -->
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:columnCount="2"
-                        android:rowCount="2"
-                        android:useDefaultMargins="true">
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="8dp">
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btn_alta_docente"
-                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                            style="@style/Widget.MaterialComponents.Button"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_columnWeight="1"
+                            android:layout_weight="1"
+                            android:layout_marginEnd="6dp"
                             android:text="@string/admin_btn_alta"
-                            android:textColor="@color/tec_red"
-                            app:strokeColor="@color/tec_red" />
+                            android:textSize="13sp"
+                            app:icon="@android:drawable/ic_input_add"
+                            app:iconGravity="textStart"
+                            app:iconSize="16dp"
+                            android:backgroundTint="@color/tec_red" />
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btn_ver_docente"
                             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_columnWeight="1"
+                            android:layout_weight="1"
+                            android:layout_marginStart="6dp"
                             android:text="@string/admin_btn_ver"
+                            android:textSize="13sp"
                             android:textColor="@color/tec_red"
+                            app:icon="@android:drawable/ic_menu_view"
+                            app:iconGravity="textStart"
+                            app:iconSize="16dp"
+                            app:iconTint="@color/tec_red"
                             app:strokeColor="@color/tec_red" />
+
+                    </LinearLayout>
+
+                    <!-- Fila 2: Editar | Eliminar -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="8dp">
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btn_editar_docente"
                             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_columnWeight="1"
+                            android:layout_weight="1"
+                            android:layout_marginEnd="6dp"
                             android:text="@string/admin_btn_editar"
+                            android:textSize="13sp"
                             android:textColor="@color/tec_red"
+                            app:icon="@android:drawable/ic_menu_edit"
+                            app:iconGravity="textStart"
+                            app:iconSize="16dp"
+                            app:iconTint="@color/tec_red"
                             app:strokeColor="@color/tec_red" />
 
                         <com.google.android.material.button.MaterialButton
@@ -198,45 +353,69 @@
                             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_columnWeight="1"
+                            android:layout_weight="1"
+                            android:layout_marginStart="6dp"
                             android:text="@string/admin_btn_eliminar"
+                            android:textSize="13sp"
                             android:textColor="@color/danger"
+                            app:icon="@android:drawable/ic_menu_delete"
+                            app:iconGravity="textStart"
+                            app:iconSize="16dp"
+                            app:iconTint="@color/danger"
                             app:strokeColor="@color/danger" />
 
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btn_asignar_materia_docente"
-                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_columnSpan="2"
-                            android:layout_columnWeight="1"
-                            android:text="Asignar Materia"
-                            android:textColor="@color/tec_red"
-                            app:strokeColor="@color/tec_red" />
+                    </LinearLayout>
 
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btn_asignar_alumno_docente"
-                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_columnSpan="2"
-                            android:layout_columnWeight="1"
-                            android:text="Asignar Alumno"
-                            android:textColor="@color/tec_red"
-                            app:strokeColor="@color/tec_red" />
+                    <!-- Separador y botones de asignación -->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginBottom="10dp"
+                        android:background="@color/tec_red_light" />
 
-                    </GridLayout>
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_asignar_materia_docente"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:text="Asignar Materia a Docente"
+                        android:textSize="13sp"
+                        android:textColor="@color/tec_red"
+                        app:icon="@android:drawable/ic_menu_agenda"
+                        app:iconGravity="textStart"
+                        app:iconSize="16dp"
+                        app:iconTint="@color/tec_red"
+                        app:strokeColor="@color/tec_red" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_asignar_alumno_docente"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Asignar Alumno a Docente"
+                        android:textSize="13sp"
+                        android:textColor="@color/tec_red"
+                        app:icon="@android:drawable/ic_menu_add"
+                        app:iconGravity="textStart"
+                        app:iconSize="16dp"
+                        app:iconTint="@color/tec_red"
+                        app:strokeColor="@color/tec_red" />
+
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- MATERIAS -->
+            <!-- ═══════════════════════════════ -->
+            <!-- SECCIÓN: MATERIAS              -->
+            <!-- ═══════════════════════════════ -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="4dp"
-                app:cardBackgroundColor="@color/white"
-                android:layout_marginBottom="16dp">
+                app:cardBackgroundColor="@color/white">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -244,56 +423,97 @@
                     android:orientation="vertical"
                     android:padding="20dp">
 
-                    <TextView
+                    <!-- Encabezado sección -->
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/admin_materias"
-                        android:textColor="@color/tec_red"
-                        android:textSize="13sp"
-                        android:textStyle="bold" />
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginBottom="4dp">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@android:drawable/ic_menu_myplaces"
+                            android:tint="@color/tec_red"
+                            android:layout_marginEnd="8dp" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/admin_materias"
+                            android:textColor="@color/tec_red"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="14dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="16dp"
                         android:background="@color/tec_red_light" />
 
-                    <GridLayout
+                    <!-- Fila 1: Alta | Ver -->
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:columnCount="2"
-                        android:rowCount="2"
-                        android:useDefaultMargins="true">
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="8dp">
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btn_alta_materia"
-                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                            style="@style/Widget.MaterialComponents.Button"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_columnWeight="1"
+                            android:layout_weight="1"
+                            android:layout_marginEnd="6dp"
                             android:text="@string/admin_btn_alta"
-                            android:textColor="@color/tec_red"
-                            app:strokeColor="@color/tec_red" />
+                            android:textSize="13sp"
+                            app:icon="@android:drawable/ic_input_add"
+                            app:iconGravity="textStart"
+                            app:iconSize="16dp"
+                            android:backgroundTint="@color/tec_red" />
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btn_ver_materia"
                             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_columnWeight="1"
+                            android:layout_weight="1"
+                            android:layout_marginStart="6dp"
                             android:text="@string/admin_btn_ver"
+                            android:textSize="13sp"
                             android:textColor="@color/tec_red"
+                            app:icon="@android:drawable/ic_menu_view"
+                            app:iconGravity="textStart"
+                            app:iconSize="16dp"
+                            app:iconTint="@color/tec_red"
                             app:strokeColor="@color/tec_red" />
+
+                    </LinearLayout>
+
+                    <!-- Fila 2: Editar | Eliminar -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btn_editar_materia"
                             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_columnWeight="1"
+                            android:layout_weight="1"
+                            android:layout_marginEnd="6dp"
                             android:text="@string/admin_btn_editar"
+                            android:textSize="13sp"
                             android:textColor="@color/tec_red"
+                            app:icon="@android:drawable/ic_menu_edit"
+                            app:iconGravity="textStart"
+                            app:iconSize="16dp"
+                            app:iconTint="@color/tec_red"
                             app:strokeColor="@color/tec_red" />
 
                         <com.google.android.material.button.MaterialButton
@@ -301,12 +521,19 @@
                             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_columnWeight="1"
+                            android:layout_weight="1"
+                            android:layout_marginStart="6dp"
                             android:text="@string/admin_btn_eliminar"
+                            android:textSize="13sp"
                             android:textColor="@color/danger"
+                            app:icon="@android:drawable/ic_menu_delete"
+                            app:iconGravity="textStart"
+                            app:iconSize="16dp"
+                            app:iconTint="@color/danger"
                             app:strokeColor="@color/danger" />
 
-                    </GridLayout>
+                    </LinearLayout>
+
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
