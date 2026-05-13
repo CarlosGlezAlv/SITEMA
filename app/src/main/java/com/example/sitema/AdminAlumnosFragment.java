@@ -249,29 +249,19 @@ public class AdminAlumnosFragment extends Fragment {
         etClave.setHint("Clave de la Materia");
         layout.addView(etClave);
 
-        final EditText etCalificacion = new EditText(requireContext());
-        etCalificacion.setHint("Calificación (ej. 10.0)");
-        layout.addView(etCalificacion);
-
         builder.setView(layout);
 
         builder.setPositiveButton("Asignar", (dialog, which) -> {
             String numControl = etNumControl.getText().toString().trim();
             String clave = etClave.getText().toString().trim();
-            String calificacionStr = etCalificacion.getText().toString().trim();
 
-            if (numControl.isEmpty() || clave.isEmpty() || calificacionStr.isEmpty()) {
+            if (numControl.isEmpty() || clave.isEmpty()) {
                 Toast.makeText(requireContext(), "Todos los campos son obligatorios", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            double calificacion = 0;
-            try {
-                calificacion = Double.parseDouble(calificacionStr);
-            } catch (Exception e) {
-                Toast.makeText(requireContext(), "Calificación inválida", Toast.LENGTH_SHORT).show();
-                return;
-            }
+            // El administrador solo asigna la materia, el docente pondrá la calificación.
+            double calificacion = 0.0;
 
             alumnoManager.open();
             boolean exito = alumnoManager.asignarMateria(numControl, clave, calificacion);
