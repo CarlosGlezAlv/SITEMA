@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:paddingStart="10dp"
+    android:paddingEnd="10dp"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp">
+
+    <TextView
+        android:id="@+id/tv_admin_docente_empleado"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textSize="13sp"
+        android:textColor="@color/text_primary"
+        android:text="EMP-0001" />
+
+    <TextView
+        android:id="@+id/tv_admin_docente_nombre"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:textSize="13sp"
+        android:textColor="@color/text_primary"
+        android:text="Nombre Docente" />
+
+    <TextView
+        android:id="@+id/tv_admin_docente_dir"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.5"
+        android:textSize="12sp"
+        android:textColor="@color/text_secondary"
+        android:text="Dirección"
+        android:textAlignment="textEnd"
+        android:maxLines="1"
+        android:ellipsize="end" />
+
+</LinearLayout>
