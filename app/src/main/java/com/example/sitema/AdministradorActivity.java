@@ -43,7 +43,7 @@ public class AdministradorActivity extends AppCompatActivity {
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
-                toolbar.setTitle("Sección: " + tabTitles[position]);
+                toolbar.setTitle(tabTitles[position]);
             }
         });
     }

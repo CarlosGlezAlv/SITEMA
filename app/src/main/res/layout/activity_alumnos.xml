@@ -147,9 +147,7 @@
                         app:boxCornerRadiusTopStart="10dp"
                         app:boxCornerRadiusTopEnd="10dp"
                         app:boxCornerRadiusBottomStart="10dp"
-                        app:boxCornerRadiusBottomEnd="10dp"
-                        app:prefixText="+52 "
-                        app:prefixTextColor="@color/tec_red">
+                        app:boxCornerRadiusBottomEnd="10dp">
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/et_telefono"
                             android:layout_width="match_parent"
